@@ -1,0 +1,8 @@
+{
+  "module_name": "Standard WASM Module",
+  "author": ["IzanamiiDevv"],
+  "module_id": "UTL-WASM-001",
+  "version": 1,
+  "depends_on": [],
+  "uses": ["utils"]
+}

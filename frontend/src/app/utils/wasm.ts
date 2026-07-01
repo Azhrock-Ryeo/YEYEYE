@@ -24,21 +24,19 @@ const info = {
     }
 };
 
-export async function loadWasmModule(
-    name: string
-): Promise<WebAssembly.Exports> {
-
-    if (cache.has(name)) {
-        return cache.get(name)!;
-    }
-
+/**
+ * Loads a WebAssembly module by name.
+ *
+ * @export
+ * @async
+ * @param {string} name 
+ * @returns {Promise<WebAssembly.Exports>} 
+ */
+export async function loadWasmModule(name: string): Promise<WebAssembly.Exports> {
+    if (cache.has(name)) return cache.get(name)!;
     const response = await fetch(`/wasm/${name}.wasm`);
-
     const bytes = await response.arrayBuffer();
-
     const wasm = await WebAssembly.instantiate(bytes, info);
-
     cache.set(name, wasm.instance.exports);
-
     return wasm.instance.exports;
 }
