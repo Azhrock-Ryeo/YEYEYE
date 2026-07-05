@@ -1,8 +1,12 @@
 {
   "module_name": "stdwasm",
-  "author": ["IzanamiiDevv"],
+  "author": [
+    "IzanamiiDevv"
+  ],
   "module_id": "UTL-WASM-001",
   "version": 1,
   "depends_on": [],
-  "uses": ["utils"]
+  "uses": [
+    "utils"
+  ]
 }

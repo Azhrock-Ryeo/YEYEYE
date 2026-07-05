@@ -1,45 +1,43 @@
-const fs = require("fs")
-const path = require("path")
-const https = require("https")
-const http = require("http")
-const { execSync } = require("child_process")
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
+const http = require("http");
+const { execSync } = require("child_process");
 
-const SRC_BASE = path.join("frontend", "src")
-const MOD_BASE = path.join(SRC_BASE, "module")
+const SRC_BASE = path.join("frontend", "src");
+const MOD_BASE = path.join(SRC_BASE, "module");
 
-const R = "\x1b[0m"
-const GREEN = "\x1b[32m"
-const YELLOW = "\x1b[33m"
-const RED = "\x1b[31m"
-const CYAN = "\x1b[36m"
-const BOLD = "\x1b[1m"
+const R = "\x1b[0m";
+const GREEN = "\x1b[32m";
+const YELLOW = "\x1b[33m";
+const RED = "\x1b[31m";
+const CYAN = "\x1b[36m";
+const BOLD = "\x1b[1m";
 
-const [,, cmd, arg1] = process.argv
+const [,, cmd, arg1] = process.argv;
 
 function fetchUrl(url) {
   return new Promise((resolve, reject) => {
-    const client = url.startsWith("https") ? https : http
+    const client = url.startsWith("https") ? https : http;
     client.get(url, (res) => {
-      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return fetchUrl(res.headers.location).then(resolve).catch(reject)
-      }
-      if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode}`))
-      let data = ""
-      res.on("data", chunk => data += chunk)
-      res.on("end", () => resolve(data))
-    }).on("error", reject)
-  })
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location)
+        return fetchUrl(res.headers.location).then(resolve).catch(reject);
+      if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode}`));
+      let data = "";
+      res.on("data", chunk => data += chunk);
+      res.on("end", () => resolve(data));
+    }).on("error", reject);
+  });
 }
 
 function fetchFile(url, dest) {
   return new Promise((resolve, reject) => {
-    const client = url.startsWith("https") ? https : http
+    const client = url.startsWith("https") ? https : http;
     client.get(url, (res) => {
-      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        return fetchFile(res.headers.location, dest).then(resolve).catch(reject)
-      }
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location)
+        return fetchFile(res.headers.location, dest).then(resolve).catch(reject);
       if (res.statusCode !== 200) return reject(new Error(`HTTP ${res.statusCode}`))
-      const out = fs.createWriteStream(dest)
+      const out = fs.createWriteStream(dest);
       res.pipe(out)
       out.on("finish", resolve)
       out.on("error", reject)
@@ -85,8 +83,8 @@ async function cmdInstall(manifestUrl) {
   // Derive base URL: strip /module/<ModuleName>/pavillion.module.json
   const baseUrl = manifestUrl
     .replace(/\/pavillion\.module\.json$/, "")
-    .replace(/\/[^/]+$/, "")   // strip module name folder
-    .replace(/\/[^/]+$/, "")   // strip "module" folder
+    .replace(/\/[^/]+$/, "")
+    .replace(/\/[^/]+$/, "")
 
   console.log(`${CYAN}[ppm] Installing: ${BOLD}${module_name}${R} ${CYAN}(v${version})${R}`)
   console.log(`${CYAN}[ppm] Scopes: ${uses.join(", ")}${R}`)
@@ -94,11 +92,8 @@ async function cmdInstall(manifestUrl) {
   let allOk = true
 
   for (const scope of uses) {
-    const isComponent = scope === "components"
-    const files = isComponent
-      ? ["README.md", "types.ts", "style.css", "index.tsx"]
-      : ["README.md", "types.ts", "index.ts"]
-
+    const isComponent = scope === "components";
+    const files = isComponent ? ["README.md", "types.ts", "style.css", "index.tsx"] : ["README.md", "types.ts", "index.ts"]
     const destDir = path.join(SRC_BASE, scope, module_name)
     ensureDir(destDir)
 
@@ -157,11 +152,8 @@ function cmdStatus() {
   } else {
     for (const m of modules) {
       const missing = (m.depends_on || []).filter(dep => !installedNames.has(dep))
-      if (missing.length === 0) {
-        console.log(`  ${GREEN}${m.module_id}  ${m.module_name}  v${m.version}  GOOD${R}`)
-      } else {
-        console.log(`  ${YELLOW}${m.module_id}  ${m.module_name}  v${m.version}  MISSING DEPENDENCIES: ${missing.join(", ")}${R}`)
-      }
+      if (missing.length === 0) console.log(`  ${GREEN}${m.module_id}  ${m.module_name}  v${m.version}  GOOD${R}`)
+      else console.log(`  ${YELLOW}${m.module_id}  ${m.module_name}  v${m.version}  MISSING DEPENDENCIES: ${missing.join(", ")}${R}`)
     }
   }
 
@@ -176,9 +168,8 @@ function cmdStatusModule() {
   console.log(`${BOLD}${CYAN}  PPM MODULE INTEGRITY CHECK${R}`)
   console.log(`  ${CYAN}--------------------------------------------${R}`)
 
-  if (modules.length === 0) {
-    console.log(`${YELLOW}  No modules installed.${R}`)
-  } else {
+  if (modules.length === 0) console.log(`${YELLOW}  No modules installed.${R}`);
+  else {
     for (const m of modules) {
       const missing = []
       for (const scope of (m.uses || [])) {
@@ -187,14 +178,9 @@ function cmdStatusModule() {
           missing.push(`${scope}/${m.module_name} (folder missing)`)
           continue
         }
-        const expected = scope === "components"
-          ? ["README.md", "types.ts", "style.css", "index.tsx"]
-          : ["README.md", "types.ts", "index.ts"]
-        for (const file of expected) {
-          if (!fs.existsSync(path.join(scopeDir, file))) {
-            missing.push(`${scope}/${m.module_name}/${file}`)
-          }
-        }
+        const expected = scope === "components" ? ["README.md", "types.ts", "style.css", "index.tsx"] : ["README.md", "types.ts", "index.ts"]
+        for (const file of expected)
+          if (!fs.existsSync(path.join(scopeDir, file))) missing.push(`${scope}/${m.module_name}/${file}`)
       }
 
       if (missing.length === 0) {

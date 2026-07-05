@@ -14,7 +14,11 @@
     "build:backend": "node initialize.js && docker compose build backend",
     "up": "docker compose up",
     "up:frontend": "node initialize.js && docker compose up frontend",
-    "up:backend": "node initialize.js && docker compose up backend"
+    "up:backend": "node initialize.js && docker compose up backend",
+    "ppm:install": "node ppm.js install",
+    "ppm:status": "node ppm.js status",
+    "ppm:status:module": "node ppm.js status module",
+    "ppm:list": "node ppm.js list"
   },
   "repository": {
     "type": "git",

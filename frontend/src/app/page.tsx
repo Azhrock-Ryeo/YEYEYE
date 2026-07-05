@@ -41,9 +41,7 @@ export default function Home() {
                 )}
 
                 {!loading && !error && (
-                    <p>
-                        10 + 5 = <strong>{add?.(10, 5) ?? 0}</strong>
-                    </p>
+                    <p>10 + 5 = <strong>{add?.(10, 5) ?? 0}</strong></p>
                 )}
             </div>
         </main>
