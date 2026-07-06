@@ -13,15 +13,32 @@ root/
         - src/
             - app/
                 - api/
-                - components/
-                    - *.tsx
+                    - *.ts
                 - pages/
                     - *.tsx
-                - utils/
-                    - *.ts
                 - globals.css
                 - layout.tsx
                 - page.tsx
+            
+            - utils/
+                - <module_name>/
+                    - types.ts
+                    - index.ts
+                    - README.md
+            - lib/
+                - <module_name>/
+                    - types.ts
+                    - index.ts
+                    - README.md
+            - components/
+                - <module_name>/
+                    - styles.css
+                    - types.ts
+                    - index.tsx
+                    - README.md
+            - module/
+                - <module_name>/
+                    - pavillion.module.json
             - wasm/
                 - *.cpp
         - eslint.config.mjs

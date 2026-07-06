@@ -10,3 +10,10 @@ services:
       - "$BACKEND_PORT:5000"
     profiles:
       - backend
+
+  "documents":
+    build: ./docs
+    ports:
+      - "$DOCUMENTS_PORT:4001"
+    profiles:
+      - documents
