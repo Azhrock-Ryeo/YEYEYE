@@ -1,0 +1,8 @@
+{
+  "module_name": "bading_si_rolf",
+  "author": ["azhrock"],
+  "module_id": "UTL-STR-001",
+  "version": 1,
+  "depends_on": [],
+  "uses": ["utils"]
+}
